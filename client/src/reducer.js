@@ -3,6 +3,7 @@ export const IS_AUTH = 'IS_AUTH';
 export const SIGNOUT_USER = 'SIGNOUT_USER';
 export const CREATE_DRAFT = 'CREATE_DRAFT';
 export const UPDATE_DRAFT_LOCATION = 'UPDATE_DRAFT_LOCATION';
+export const DELETE_DRAFT = 'DELETE_DRAFT';
 
 export default function reducer(state, { type, payload }) {
   switch (type) {
@@ -15,7 +16,9 @@ export default function reducer(state, { type, payload }) {
     case CREATE_DRAFT:
       return { ...state, draft: { latitude: 0, longitude: 0 } };
     case UPDATE_DRAFT_LOCATION:
-      return {...state, draft: payload}
+      return { ...state, draft: payload };
+    case DELETE_DRAFT:
+      return { ...state, draft: null };
     default:
       return state;
   }

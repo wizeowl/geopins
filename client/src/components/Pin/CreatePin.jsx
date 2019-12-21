@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { withStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
@@ -7,11 +7,21 @@ import AddAPhotoIcon from "@material-ui/icons/AddAPhotoTwoTone";
 import LandscapeIcon from "@material-ui/icons/LandscapeOutlined";
 import ClearIcon from "@material-ui/icons/Clear";
 import SaveIcon from "@material-ui/icons/SaveTwoTone";
+import Context from '../../context';
+import { DELETE_DRAFT } from '../../reducer';
 
 const CreatePin = ({ classes }) => {
   const [title, setTitle] = useState('');
   const [image, setImage] = useState('');
   const [content, setContent] = useState('');
+  const { dispatch } = useContext(Context);
+
+  const discardDraft = () => {
+    setTitle('');
+    setImage('');
+    setContent('');
+    dispatch({ type: DELETE_DRAFT });
+  };
 
   return (
     <form className={classes.form}>
@@ -58,7 +68,7 @@ const CreatePin = ({ classes }) => {
       </div>
 
       <div>
-        <Button className={classes.button} variant={'contained'} color={'primary'}>
+        <Button className={classes.button} variant={'contained'} color={'primary'} onClick={discardDraft}>
           <ClearIcon className={classes.leftIcon}/>
           Discard
         </Button>
