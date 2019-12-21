@@ -41,6 +41,7 @@ const Login = ({ classes }) => {
         style={{color: 'rgb(66, 133, 244)'}}>
         Welcome
       </Typography>
+
       <GoogleLogin
         clientId={'344093209540-pod2skf88hbbgr0l57bj1hus6lbi9r8i.apps.googleusercontent.com'}
         onSuccess={onSuccess}
@@ -49,6 +50,7 @@ const Login = ({ classes }) => {
         cookiePolicy={'single_host_origin'}
         uxMode={'popup'}
         theme={'dark'}
+        buttonText='Login with Google'
       />
     </div>
   );
