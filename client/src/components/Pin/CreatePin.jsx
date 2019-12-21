@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, { useContext, useState } from "react";
 import { withStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
@@ -21,6 +22,24 @@ const CreatePin = ({ classes }) => {
     setImage('');
     setContent('');
     dispatch({ type: DELETE_DRAFT });
+  };
+
+  const uploadImage = async () => {
+    const data = new FormData();
+    data.append('file', image);
+    data.append('upload_preset', 'geopins');
+    data.append('cloud_name', 'nidhalbt');
+
+    const url = 'https://api.cloudinary.com/v1_1/nidhalbt/image/upload';
+    const res = await axios.post(url, data);
+
+    return res.data.url;
+  };
+
+  const submit = async event => {
+    event.preventDefault();
+    const url = await uploadImage();
+    console.log({ title, image, url, content });
   };
 
   return (
@@ -78,6 +97,7 @@ const CreatePin = ({ classes }) => {
           color={'secondary'}
           type='submit'
           disabled={!(title.trim() && image && content)}
+          onClick={submit}
         >
           Submit
           <SaveIcon className={classes.rightIcon}/>
