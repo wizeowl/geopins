@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { withStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
@@ -9,6 +9,10 @@ import ClearIcon from "@material-ui/icons/Clear";
 import SaveIcon from "@material-ui/icons/SaveTwoTone";
 
 const CreatePin = ({ classes }) => {
+  const [title, setTitle] = useState('');
+  const [image, setImage] = useState('');
+  const [content, setContent] = useState('');
+
   return (
     <form className={classes.form}>
       <Typography className={classes.alignCenter} component='h2' variant={'h4'} color={'secondary'}>
@@ -19,17 +23,38 @@ const CreatePin = ({ classes }) => {
           name='title'
           label='title'
           placeholder='Insert pin title'
+          onChange={({ target: { value } }) => setTitle(value)}
         />
-        <input type="file" accept='image/*' id='image' className={classes.input}/>
+        <input
+          type="file"
+          accept='image/*'
+          id='image'
+          className={classes.input}
+          onChange={({ target: { files } }) => setImage(files[0])}
+        />
         <label htmlFor='image'>
-          <Button component='span' size={'small'} className={classes.button}>
+          <Button
+            component='span'
+            size={'small'}
+            className={classes.button}
+            style={{ color: image && 'green' }}
+          >
             <AddAPhotoIcon/>
           </Button>
         </label>
       </div>
 
       <div className={classes.contentField}>
-        <TextField name='content' label='Content' multiline rows='6' margin={'normal'} fullWidth variant={'outlined'}/>
+        <TextField
+          name='content'
+          label='Content'
+          multiline
+          rows='6'
+          margin={'normal'}
+          fullWidth
+          variant={'outlined'}
+          onChange={({ target: { value } }) => setContent(value)}
+        />
       </div>
 
       <div>
@@ -37,7 +62,13 @@ const CreatePin = ({ classes }) => {
           <ClearIcon className={classes.leftIcon}/>
           Discard
         </Button>
-        <Button className={classes.button} variant={'contained'} color={'secondary'} type='submit'>
+        <Button
+          className={classes.button}
+          variant={'contained'}
+          color={'secondary'}
+          type='submit'
+          disabled={!(title.trim() && image && content)}
+        >
           Submit
           <SaveIcon className={classes.rightIcon}/>
         </Button>
