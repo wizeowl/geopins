@@ -3,6 +3,7 @@ import ReactMapGL, { NavigationControl, Marker } from 'react-map-gl';
 import { withStyles } from "@material-ui/core/styles";
 import Context from '../context';
 import { CREATE_DRAFT, UPDATE_DRAFT_LOCATION } from '../reducer';
+import Blog from './Blog';
 import PinIcon from './PinIcon';
 // import Button from "@material-ui/core/Button";
 // import Typography from "@material-ui/core/Typography";
@@ -83,6 +84,8 @@ const Map = ({ classes }) => {
           )
         }
       </ReactMapGL>
+
+      <Blog/>
     </div>
   );
 };

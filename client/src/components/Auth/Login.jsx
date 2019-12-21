@@ -31,9 +31,6 @@ const Login = ({ classes }) => {
     dispatch({ type: IS_AUTH, payload: false });
   };
 
-  const onError = error => {
-  };
-
   return (
     <div className={classes.root}>
       <Typography

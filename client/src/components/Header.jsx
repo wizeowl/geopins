@@ -8,7 +8,7 @@ import Typography from "@material-ui/core/Typography";
 import Signout from './Auth/Signout';
 
 const Header = ({ classes }) => {
-  const { state: { currentUser, isAuth } } = useContext(Context);
+  const { state: { currentUser } } = useContext(Context);
   return (
     <div className={classes.root}>
       <AppBar position='static'>
