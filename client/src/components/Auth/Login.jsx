@@ -5,7 +5,7 @@ import { withStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import Context from '../../context';
 import { ME_QUERY } from '../../graphql/queries';
-import { LOGIN_USER } from '../../reducer';
+import { IS_AUTH, LOGIN_USER } from '../../reducer';
 
 const Login = ({ classes }) => {
   const { dispatch } = useContext(Context);
@@ -19,6 +19,7 @@ const Login = ({ classes }) => {
 
       const { me } = await client.request(ME_QUERY);
       dispatch({ type: LOGIN_USER, payload: me });
+      dispatch({ type: IS_AUTH, payload: googleUser.isSignedIn() });
     } catch (error) {
       onFailure(error);
     }
@@ -27,6 +28,7 @@ const Login = ({ classes }) => {
   const onFailure = error => {
     console.log('Allah Ghaleb. Shit Happens', error);
     dispatch({ type: LOGIN_USER, payload: null });
+    dispatch({ type: IS_AUTH, payload: false });
   };
 
   const onError = error => {
