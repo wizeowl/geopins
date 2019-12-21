@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import ReactMapGL, { NavigationControl, Marker } from 'react-map-gl';
 import { withStyles } from "@material-ui/core/styles";
+import Context from '../context';
+import { CREATE_DRAFT, UPDATE_DRAFT_LOCATION } from '../reducer';
 import PinIcon from './PinIcon';
 // import Button from "@material-ui/core/Button";
 // import Typography from "@material-ui/core/Typography";
@@ -13,9 +15,10 @@ const INITIAL_VIEWPORT = {
 };
 
 const Map = ({ classes }) => {
+  const { state, dispatch } = useContext(Context);
   const [viewport, setViewport] = useState(INITIAL_VIEWPORT);
-
   const [userPosition, setUserPosition] = useState(null);
+
   useEffect(() => {
     getUserPosition();
   }, []);
@@ -30,9 +33,19 @@ const Map = ({ classes }) => {
     }
   };
 
+  const handleMapClick = ({ lngLat, leftButton }) => {
+    if (!leftButton) return;
+    if (!state.draft) {
+      dispatch({ type: CREATE_DRAFT });
+    }
+    const [longitude, latitude] = lngLat;
+    dispatch({ type: UPDATE_DRAFT_LOCATION, payload: { longitude, latitude } });
+  };
+
   return (
     <div className={classes.root}>
       <ReactMapGL
+        onClick={handleMapClick}
         width='100vw'
         height='calc(100vh - 64px)'
         mapStyle='mapbox://styles/mapbox/streets-v9'
@@ -50,8 +63,22 @@ const Map = ({ classes }) => {
               latitude={userPosition.latitude}
               longitude={userPosition.longitude}
               offsetLeft={-19}
-              offsetTop={-37}>
+              offsetTop={-37}
+            >
               <PinIcon size={40} color='red'/>
+            </Marker>
+          )
+        }
+
+        {
+          state.draft && (
+            <Marker
+              latitude={state.draft.latitude}
+              longitude={state.draft.longitude}
+              offsetLeft={-19}
+              offsetTop={-37}
+            >
+              <PinIcon size={40} color='hotpink'/>
             </Marker>
           )
         }
