@@ -7,6 +7,7 @@ export const DELETE_DRAFT = 'DELETE_DRAFT';
 export const SET_PINS = 'SET_PINS';
 export const SET_PIN = 'SET_PIN';
 export const CREATE_PIN = 'CREATE_PIN';
+export const DELETE_PIN = 'DELETE_PIN';
 
 export default function reducer(state, { type, payload }) {
   switch (type) {
@@ -30,6 +31,8 @@ export default function reducer(state, { type, payload }) {
       const newPin = payload;
       const prevPins = state.pins.filter(pin => pin._id !== newPin._id);
       return { ...state, pins: [...prevPins, newPin] };
+    case DELETE_PIN:
+      return { ...state, pins: state.pins.filter(pin => pin._id !== payload._id) };
     default:
       return state;
   }

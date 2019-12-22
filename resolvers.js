@@ -21,6 +21,9 @@ module.exports = {
       const newPin = await new Pin({ ...args.input, author: ctx.currentUser._id }).save();
       const pin = await Pin.populate(newPin, 'author');
       return pin;
+    }),
+    deletePin: authenticated((root, { pinId }, { currentUser }) => {
+      return Pin.findOneAndDelete({ _id: pinId, author: currentUser._id }).exec();
     })
   }
 };
