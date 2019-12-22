@@ -1,24 +1,22 @@
-import React, { useContext, useState } from "react";
 import { withStyles } from "@material-ui/core";
-import InputBase from "@material-ui/core/InputBase";
+import Divider from "@material-ui/core/Divider";
 import IconButton from "@material-ui/core/IconButton";
+import InputBase from "@material-ui/core/InputBase";
 import ClearIcon from "@material-ui/icons/Clear";
 import SendIcon from "@material-ui/icons/Send";
-import Divider from "@material-ui/core/Divider";
+import React, { useContext, useState } from "react";
 import { useClient } from '../../client';
 import Context from '../../context';
 import { CREATE_COMMENT_MUTATION } from '../../graphql/mutations';
-import { CREATE_COMMENT } from '../../reducer';
 
 const CreateComment = ({ classes }) => {
-  const { state: { currentPin }, dispatch } = useContext(Context);
+  const { state: { currentPin } } = useContext(Context);
   const [text, setText] = useState('');
   const client = useClient();
 
   const submitComment = async () => {
     const variables = { text, pinId: currentPin._id };
-    const { createComment } = await client.request(CREATE_COMMENT_MUTATION, variables);
-    dispatch({ type: CREATE_COMMENT, payload: createComment });
+    await client.request(CREATE_COMMENT_MUTATION, variables);
     setText('');
   };
 

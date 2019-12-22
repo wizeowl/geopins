@@ -11,7 +11,7 @@ import React, { useContext, useState } from "react";
 import { useClient } from '../../client';
 import Context from '../../context';
 import { CREATE_PIN_MUTATION } from '../../graphql/mutations';
-import { CREATE_PIN, DELETE_DRAFT } from '../../reducer';
+import { DELETE_DRAFT } from '../../reducer';
 
 const CreatePin = ({ classes }) => {
   const [title, setTitle] = useState('');
@@ -51,9 +51,7 @@ const CreatePin = ({ classes }) => {
 
       const url = await uploadImage();
       const variables = { title, content, ...draft, image: url };
-      const { createPin } = await client.request(CREATE_PIN_MUTATION, variables);
-
-      dispatch({ type: CREATE_PIN, payload: createPin });
+      await client.request(CREATE_PIN_MUTATION, variables);
       setSubmitting(false);
       discardDraft();
     } catch (error) {

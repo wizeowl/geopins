@@ -13,18 +13,18 @@ mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true })
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  context: async ({ req }) => {
+  context: async ({ req, connection }) => {
+    let authToken = null;
+    let currentUser = null;
     try {
-      const authToken = req.headers.authorization;
+      authToken = req.headers.authorization;
       if (authToken) {
-        const currentUser = await findOrCreateUser(authToken);
-        return { currentUser };
+        currentUser = await findOrCreateUser(authToken);
       }
-    } catch (error) {
-      console.log('Allah Ghaleb. Famma mochkel.', error);
+    } catch (err) {
+      console.error(`Unable to authenticate user with token ${authToken}`);
     }
-
-    return null;
+    return { currentUser };
   }
 });
 
