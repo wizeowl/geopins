@@ -1,14 +1,14 @@
-import axios from 'axios';
-import { GraphQLClient } from 'graphql-request';
-import React, { useContext, useState } from "react";
+import Button from "@material-ui/core/Button";
 import { withStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
 import AddAPhotoIcon from "@material-ui/icons/AddAPhotoTwoTone";
-import LandscapeIcon from "@material-ui/icons/LandscapeOutlined";
 import ClearIcon from "@material-ui/icons/Clear";
+import LandscapeIcon from "@material-ui/icons/LandscapeOutlined";
 import SaveIcon from "@material-ui/icons/SaveTwoTone";
+import axios from 'axios';
+import React, { useContext, useState } from "react";
+import { useClient } from '../../client';
 import Context from '../../context';
 import { CREATE_PIN_MUTATION } from '../../graphql/mutations';
 import { DELETE_DRAFT } from '../../reducer';
@@ -19,6 +19,7 @@ const CreatePin = ({ classes }) => {
   const [content, setContent] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const { state: { draft }, dispatch } = useContext(Context);
+  const client = useClient();
 
   const clear = () => {
     setTitle('');
@@ -48,14 +49,9 @@ const CreatePin = ({ classes }) => {
       setSubmitting(true);
       event.preventDefault();
 
-      const idToken = window.gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().id_token;
-      const client = new GraphQLClient('http://localhost:4000/graphql', {
-        headers: { authorization: idToken }
-      });
-
       const url = await uploadImage();
       const variables = { title, content, ...draft, image: url };
-      const { createPin } = await client.request(CREATE_PIN_MUTATION, variables);
+      await client.request(CREATE_PIN_MUTATION, variables);
 
       setSubmitting(false);
       discardDraft();
