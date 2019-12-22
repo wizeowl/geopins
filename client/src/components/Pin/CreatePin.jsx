@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { GraphQLClient } from 'graphql-request';
 import React, { useContext, useState } from "react";
 import { withStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
@@ -9,18 +10,24 @@ import LandscapeIcon from "@material-ui/icons/LandscapeOutlined";
 import ClearIcon from "@material-ui/icons/Clear";
 import SaveIcon from "@material-ui/icons/SaveTwoTone";
 import Context from '../../context';
+import { CREATE_PIN_MUTATION } from '../../graphql/mutations';
 import { DELETE_DRAFT } from '../../reducer';
 
 const CreatePin = ({ classes }) => {
   const [title, setTitle] = useState('');
   const [image, setImage] = useState('');
   const [content, setContent] = useState('');
-  const { dispatch } = useContext(Context);
+  const [submitting, setSubmitting] = useState(false);
+  const { state: { draft }, dispatch } = useContext(Context);
 
-  const discardDraft = () => {
+  const clear = () => {
     setTitle('');
     setImage('');
     setContent('');
+  };
+
+  const discardDraft = () => {
+    clear();
     dispatch({ type: DELETE_DRAFT });
   };
 
@@ -37,9 +44,25 @@ const CreatePin = ({ classes }) => {
   };
 
   const submit = async event => {
-    event.preventDefault();
-    const url = await uploadImage();
-    console.log({ title, image, url, content });
+    try {
+      setSubmitting(true);
+      event.preventDefault();
+
+      const idToken = window.gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().id_token;
+      const client = new GraphQLClient('http://localhost:4000/graphql', {
+        headers: { authorization: idToken }
+      });
+
+      const url = await uploadImage();
+      const variables = { title, content, ...draft, image: url };
+      const { createPin } = await client.request(CREATE_PIN_MUTATION, variables);
+
+      setSubmitting(false);
+      discardDraft();
+    } catch (error) {
+      setSubmitting(false);
+      console.log('Allah Ghaleb. Famma mochkel.', error);
+    }
   };
 
   return (
@@ -96,7 +119,7 @@ const CreatePin = ({ classes }) => {
           variant={'contained'}
           color={'secondary'}
           type='submit'
-          disabled={!(title.trim() && image && content)}
+          disabled={!(title.trim() && image && content) || submitting}
           onClick={submit}
         >
           Submit
