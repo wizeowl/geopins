@@ -4,6 +4,7 @@ const Context = createContext({
   currentUser: null,
   isAuth: false,
   draft: null,
+  currentPin: null,
   pins: []
 });
 
