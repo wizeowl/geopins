@@ -8,6 +8,7 @@ export const SET_PINS = 'SET_PINS';
 export const SET_PIN = 'SET_PIN';
 export const CREATE_PIN = 'CREATE_PIN';
 export const DELETE_PIN = 'DELETE_PIN';
+export const CREATE_COMMENT = 'CREATE_COMMENT';
 
 export default function reducer(state, { type, payload }) {
   switch (type) {
@@ -27,10 +28,20 @@ export default function reducer(state, { type, payload }) {
       return { ...state, pins: payload };
     case SET_PIN:
       return { ...state, currentPin: payload, draft: null };
-    case CREATE_PIN:
+    case CREATE_PIN: {
       const newPin = payload;
       const prevPins = state.pins.filter(pin => pin._id !== newPin._id);
       return { ...state, pins: [...prevPins, newPin] };
+    }
+    case CREATE_COMMENT: {
+      const updatedPin = payload;
+      const prevPins = state.pins.filter(pin => pin._id !== updatedPin._id);
+      return {
+        ...state,
+        pins: [...prevPins, updatedPin],
+        currentPin: updatedPin
+      };
+    }
     case DELETE_PIN:
       return { ...state, pins: state.pins.filter(pin => pin._id !== payload._id) };
     default:

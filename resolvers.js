@@ -24,6 +24,18 @@ module.exports = {
     }),
     deletePin: authenticated((root, { pinId }, { currentUser }) => {
       return Pin.findOneAndDelete({ _id: pinId, author: currentUser._id }).exec();
+    }),
+    createComment: authenticated(async (root, { text, pinId }, { currentUser }) => {
+      const newComment = { text, author: currentUser._id };
+      const pin = await Pin
+        .findOneAndUpdate(
+          { _id: pinId },
+          { $push: { comments: newComment } },
+          { new: true }
+        )
+        .populate('author')
+        .populate('comments.author');
+      return pin;
     })
   }
 };
