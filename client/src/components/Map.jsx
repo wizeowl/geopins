@@ -1,3 +1,4 @@
+import { unstable_useMediaQuery as useMediaQuery } from '@material-ui/core/useMediaQuery';
 import differenceInMinutes from 'date-fns/difference_in_minutes';
 import React, { useContext, useEffect, useState } from "react";
 import { Subscription } from 'react-apollo';
@@ -31,6 +32,7 @@ const INITIAL_VIEWPORT = {
 };
 
 const Map = ({ classes }) => {
+  const mobileSize = useMediaQuery('(max-width: 650px)')
   const { state, dispatch } = useContext(Context);
   const [viewport, setViewport] = useState(INITIAL_VIEWPORT);
   const [userPosition, setUserPosition] = useState(null);
@@ -89,7 +91,7 @@ const Map = ({ classes }) => {
   };
 
   return (
-    <div className={classes.root}>
+    <div className={mobileSize ? classes.rootMobile : classes.root}>
       <ReactMapGL
         onClick={handleMapClick}
         width='100vw'
@@ -97,6 +99,7 @@ const Map = ({ classes }) => {
         mapStyle='mapbox://styles/mapbox/streets-v9'
         {...viewport}
         onViewportChange={setViewport}
+        scrollZoom={!mobileSize}
         mapboxApiAccessToken='pk.eyJ1IjoibmlkaGFsYnQiLCJhIjoiY2s0ZzNkM25tMHNqcjNsbzM1Y2FteXF3NCJ9._RgBFukWRU5uQtQT_lT4Rg'>
 
         <div className={classes.navigationControl}>

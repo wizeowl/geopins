@@ -1,3 +1,4 @@
+import { unstable_useMediaQuery as useMediaQuery } from '@material-ui/core/useMediaQuery';
 import React, { useContext } from "react";
 import { GoogleLogout } from 'react-google-login';
 import { withStyles } from "@material-ui/core/styles";
@@ -7,6 +8,7 @@ import Context from '../../context';
 import { SIGNOUT_USER } from '../../reducer';
 
 const Signout = ({ classes }) => {
+  const mobileSize = useMediaQuery('(max-width: 650px)');
   const { dispatch } = useContext(Context);
   const onSignout = () => {
     dispatch({ type: SIGNOUT_USER });
@@ -18,7 +20,11 @@ const Signout = ({ classes }) => {
       buttonText='Signout'
       render={({ onClick }) => (
         <span className={classes.root} onClick={onClick}>
-          <Typography variant='body1' className={classes.buttonText}>
+          <Typography
+            style={{ display: mobileSize ? 'none' : 'block' }}
+            variant='body1'
+            className={classes.buttonText}
+          >
             Signout
           </Typography>
           <ExitToAppIcon className={classes.buttonIcon}/>

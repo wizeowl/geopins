@@ -1,5 +1,6 @@
 import Button from "@material-ui/core/Button";
 import { withStyles } from "@material-ui/core/styles";
+import { unstable_useMediaQuery as useMediaQuery } from '@material-ui/core/useMediaQuery';
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 import AddAPhotoIcon from "@material-ui/icons/AddAPhotoTwoTone";
@@ -14,6 +15,7 @@ import { CREATE_PIN_MUTATION } from '../../graphql/mutations';
 import { DELETE_DRAFT } from '../../reducer';
 
 const CreatePin = ({ classes }) => {
+  const mobileSize = useMediaQuery('(max-width: 650px)');
   const [title, setTitle] = useState('');
   const [image, setImage] = useState('');
   const [content, setContent] = useState('');
@@ -96,7 +98,7 @@ const CreatePin = ({ classes }) => {
           name='content'
           label='Content'
           multiline
-          rows='6'
+          rows={mobileSize ? 3 : 6}
           margin={'normal'}
           fullWidth
           variant={'outlined'}

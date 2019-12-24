@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import { withStyles } from "@material-ui/core/styles";
+import { unstable_useMediaQuery as useMediaQuery } from '@material-ui/core/useMediaQuery';
 import Context from '../context';
 import { Paper } from "@material-ui/core";
 import CreatePin from './Pin/CreatePin';
@@ -7,6 +8,7 @@ import NoContent from './Pin/NoContent';
 import PinContent from './Pin/PinContent';
 
 const Blog = ({ classes }) => {
+  const mobileSize = useMediaQuery('(max-width: 650px)');
   const { state } = useContext(Context);
   const { draft, currentPin } = state;
   let BlogContent;
@@ -20,7 +22,7 @@ const Blog = ({ classes }) => {
   }
 
   return (
-    <Paper className={classes.root}>
+    <Paper className={mobileSize ? classes.rootMobile : classes.root}>
       <BlogContent/>
     </Paper>
   );
