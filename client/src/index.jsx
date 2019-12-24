@@ -15,8 +15,12 @@ import reducer from "./reducer";
 import "mapbox-gl/dist/mapbox-gl.css";
 import * as serviceWorker from "./serviceWorker";
 
+const WS_LINK = window.location.hostname === 'localhost'
+  ? 'ws://localhost:4000/graphql'
+  : 'wss://nidhal-geopins.herokuapp.com/graphql';
+
 const webSocketLink = new WebSocketLink({
-  uri: 'ws://localhost:4000/graphql',
+  uri: WS_LINK,
   options: { reconnect: true }
 });
 
