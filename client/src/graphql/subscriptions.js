@@ -4,12 +4,16 @@ export const PIN_CREATED_SUBSCRIPTION = gql`
   subscription {
     pinAdded {
       _id
+      createdAt
       title
       image
       content
       longitude
       latitude
       author { _id name email picture }
+      comments {
+        text
+      }
     }
   }
 `;

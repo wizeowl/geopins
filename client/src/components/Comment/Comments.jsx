@@ -1,4 +1,4 @@
-import distanceInWordsToNow from 'date-fns/distance_in_words_to_now'
+import distanceInWordsToNow from 'date-fns/distance_in_words_to_now';
 import Avatar from "@material-ui/core/Avatar";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
@@ -12,7 +12,7 @@ const Comments = ({ classes, comments }) => {
   return (
     <List className={classes.root}>
       {
-        comments.map((comment, i) => (
+        (comments || []).map((comment, i) => (
           <ListItem key={i} alignItems='flex-start'>
             <ListItemAvatar>
               <Avatar src={comment.author.picture} alt={comment.author.name}/>
