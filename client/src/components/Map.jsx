@@ -32,7 +32,7 @@ const INITIAL_VIEWPORT = {
 };
 
 const Map = ({ classes }) => {
-  const mobileSize = useMediaQuery('(max-width: 650px)')
+  const mobileSize = useMediaQuery('(max-width: 650px)');
   const { state, dispatch } = useContext(Context);
   const [viewport, setViewport] = useState(INITIAL_VIEWPORT);
   const [userPosition, setUserPosition] = useState(null);
@@ -89,6 +89,13 @@ const Map = ({ classes }) => {
     await client.request(DELETE_PIN_MUTATION, variables);
     setPopup(null);
   };
+
+  useEffect(() => {
+    const pinExists = popup && pins.includes(pin => pin._id === popup._id);
+    if (!pinExists) {
+      setPopup(null);
+    }
+  }, [pins.length]);
 
   return (
     <div className={mobileSize ? classes.rootMobile : classes.root}>
