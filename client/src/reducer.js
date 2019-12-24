@@ -11,6 +11,11 @@ export const DELETE_PIN = 'DELETE_PIN';
 export const CREATE_COMMENT = 'CREATE_COMMENT';
 
 export default function reducer(state, { type, payload }) {
+  const isCurrentPin = pin => {
+    const { currentPin } = state;
+    return currentPin && currentPin._id === pin._id;
+  };
+
   switch (type) {
     case LOGIN_USER:
       return { ...state, currentUser: payload };
@@ -42,8 +47,16 @@ export default function reducer(state, { type, payload }) {
         currentPin: updatedPin
       };
     }
-    case DELETE_PIN:
-      return { ...state, pins: state.pins.filter(pin => pin._id !== payload._id) };
+    case DELETE_PIN: {
+      const deletedPin = payload;
+      const filteredPins = state.pins.filter(pin => pin._id !== deletedPin._id);
+      const currentPin = isCurrentPin(deletedPin) ? null : state.currentPin;
+      return {
+        ...state,
+        currentPin,
+        pins: filteredPins
+      };
+    }
     default:
       return state;
   }

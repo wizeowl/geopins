@@ -91,7 +91,7 @@ const Map = ({ classes }) => {
   };
 
   useEffect(() => {
-    const pinExists = popup && pins.includes(pin => pin._id === popup._id);
+    const pinExists = popup && pins.some(pin => pin._id === popup._id);
     if (!pinExists) {
       setPopup(null);
     }
